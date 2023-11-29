@@ -12,10 +12,13 @@ extern "C" {
 #define WEATHER_THERMOMETR_SHOW_COL             (16)
 #define WEATHER_THERMOMETR_SHOW_ROW             (184)
 
-#define WEATHER_TEMPERATURE_BAR_COL             (88)
+#define WEATHER_TEMPERATURE_BAR_COL             (50)
 #define WEATHER_TEMPERATURE_BAR_ROW             (4)
 #define WEATHER_TEMPERATURE_BAR_SHOW_COL        (56)
 #define WEATHER_TEMPERATURE_BAR_SHOW_ROW        (202)
+
+#define WEATHER_TEMPERATURE_VALUE_MIN           (-30)
+#define WEATHER_TEMPERATURE_VALUE_MAX           (70)
 
 #define WEATHER_IMAGE_COL                       (60)
 #define WEATHER_IMAGE_ROW                       (60)
@@ -27,7 +30,7 @@ extern "C" {
 #define WEATHER_IMAGE_SIZE                       (WEATHER_IMAGE_COL * WEATHER_IMAGE_ROW)
 
 void weather_thermometr_show(void);
-void weather_temperature_bar_show(uint8_t temp, uint16_t color);
+void weather_temperature_bar_show(int8_t temp, uint16_t color);
 void weather_show(void);
 
 #ifdef __cplusplus

@@ -64,7 +64,7 @@ int main(void)
     astronaut_show();
     weather_show();
     weather_thermometr_show();
-    weather_temperature_bar_show(24, COLOR_YELLOW);
+    weather_temperature_bar_show(17, COLOR_YELLOW);
     update_init(10, 1);
 
     /* if (1) {

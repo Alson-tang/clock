@@ -1,8 +1,15 @@
+#include <stdio.h>
+#include <string.h>
+
 #include "st7789.h"
 #include "lcd.h"
+#include "font.h"
 #include "weather.h"
 
-const unsigned char thermometr[] = {
+#define WEATHER_TEMPERATURE_UNIT_COL        (24)
+#define WEATHER_TEMPERATURE_UNIT_ROW        (24)
+
+static const unsigned char thermometr[] = {
 0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,
 0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,
 0X00,0X00,0X00,0X00,0X39,0X63,0X7A,0X6B,0X5A,0X6B,0X3A,0X63,0X59,0X5B,0X00,0X00,
@@ -205,7 +212,7 @@ const unsigned char thermometr[] = {
 0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,
 };
 
-const unsigned char sun[] = {
+static const unsigned char sun[] = {
 0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,
 0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,
 0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,
@@ -658,6 +665,49 @@ const unsigned char sun[] = {
 0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,0X00,
 };
 
+static const unsigned char temp_unit_2424[] = {
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x24, 0x00, 0x00, 0x24, 0x03, 0x00, 0x24, 0x1F, 0xE0, 0x18, 0x38, 0x70, 0x00, 0x60, 0x18, 0x00, 0xC0, 0x1C, 0x00, 0xC0, 0x00, 0x00, 0xC0,
+0x00, 0x00, 0x80, 0x00, 0x01, 0x80, 0x00, 0x01, 0x80, 0x00, 0x01, 0x80, 0x00, 0x00, 0xC0, 0x00, 0x00, 0xC0, 0x0C, 0x00, 0xC0, 0x18, 0x00, 0x60, 0x38, 0x00, 0x38, 0xF0, 0x00, 0x1F, 0xE0, 0x00,
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00      /*"℃",11*/
+};
+
+static void weather_tempature_unit_show(uint8_t col, uint8_t row, uint16_t color, uint8_t width, uint8_t height)
+{
+    uint8_t  data = 0;
+    uint16_t loop = 0;
+    uint16_t pixel_color = 0;
+    uint16_t bytes_per_col = 0;
+
+    st7789_set_window(col, row, col + width - 1, row + height - 1);
+
+    bytes_per_col = width >> 3;
+    if (width & (0x07)) {
+        bytes_per_col += 1;
+    }
+
+    for (uint16_t i = 0; i < height; i++) {
+        for (uint16_t j = 0; j < bytes_per_col; j++) {
+            data = temp_unit_2424[(i * bytes_per_col) + j];
+
+            if (((j + 1) << 3) <= (uint16_t)width) {
+                loop = 8;
+            } else {
+                loop = ((uint16_t)width - (j << 3));
+            }
+
+            for (uint16_t k = 0; k < loop; k++) {
+                if (data & (0x80 >> k)) {
+                    pixel_color = color;
+                } else {
+                    pixel_color = lcd_get_back_color();
+                }
+
+                st7789_set_color(pixel_color);
+            }
+        }
+    }
+}
+
 void weather_thermometr_show(void)
 {
     uint16_t pixel_color = 0;
@@ -673,13 +723,14 @@ void weather_thermometr_show(void)
     }
 }
 
-void weather_temperature_bar_show(uint8_t temp, uint16_t color)
+void weather_temperature_bar_show(int8_t temp, uint16_t color)
 {
-    uint8_t width = 0;
+    char     temp_str[4] = { 0 };
+    uint8_t  width = 0;
     uint16_t pixel_color = color;
     uint16_t back_color = 0;
 
-    width = temp << 1;
+    width = (((uint8_t)(temp - WEATHER_TEMPERATURE_VALUE_MIN)) >> 1);
     back_color = lcd_get_back_color();
 
     st7789_set_window(WEATHER_TEMPERATURE_BAR_SHOW_COL,
@@ -699,6 +750,20 @@ void weather_temperature_bar_show(uint8_t temp, uint16_t color)
     for (uint32_t i = 0; i < ((uint32_t)(width * WEATHER_TEMPERATURE_BAR_ROW)); i++) {
         st7789_set_color(pixel_color);
     }
+
+    sprintf(temp_str, "%d", temp);
+    lcd_show_ascii(WEATHER_TEMPERATURE_BAR_SHOW_COL + width,
+                    WEATHER_TEMPERATURE_BAR_SHOW_ROW - ((FONT_ASCII_GENERAL_ROW - WEATHER_TEMPERATURE_BAR_ROW) >> 1),
+                    COLOR_WHITE,
+                    temp_str,
+                    FONT_ASCII_GENERAL_COL,
+                    FONT_ASCII_GENERAL_ROW);
+
+    weather_tempature_unit_show(WEATHER_TEMPERATURE_BAR_SHOW_COL + width + strlen(temp_str) * FONT_ASCII_GENERAL_COL,
+                                WEATHER_TEMPERATURE_BAR_SHOW_ROW - ((FONT_ASCII_GENERAL_ROW - WEATHER_TEMPERATURE_BAR_ROW) >> 1),
+                                COLOR_WHITE,
+                                WEATHER_TEMPERATURE_UNIT_COL,
+                                WEATHER_TEMPERATURE_UNIT_ROW);
 }
 
 void weather_show(void)

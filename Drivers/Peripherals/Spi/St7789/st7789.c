@@ -159,27 +159,6 @@ bool st7789_set_window(uint16_t start_col, uint16_t start_row, uint16_t end_col,
     return true;
 }
 
-static void st7789_show_single_char(char c)
-{
-    uint8_t font_data = 0;
-    uint16_t font_index = (c - ' ') * 16;
-    uint16_t color = COLOR_BLACK;
-
-    for (uint16_t i = 0; i < FONT_ASCII_GENERAL_ROW; i++) {
-        font_data = asc2_0816[font_index + i];
-
-        for (int16_t y = FONT_ASCII_GENERAL_COL - 1; y >= 0; y--) {
-            if (font_data & (0x01 << y)) {
-                color = COLOR_BLACK;
-            } else {
-                color = COLOR_WHITE;
-            }
-
-            st7789_set_color(color);
-        }
-    }
-}
-
 void st7789_init(st7789_cfg_t * st7789_cfg)
 {
     if (st7789_cfg == NULL) {
@@ -272,78 +251,6 @@ void st7789_full_screen_clear(uint16_t color)
 
     for(uint16_t col = 0; col < s_st7789_cfg.column; col++) {
         for (uint16_t row = 0; row < s_st7789_cfg.row; row++) {
-            st7789_set_color(color);
-        }
-    }
-}
-
-void st7789_show_string(uint16_t col, uint16_t row, char *str)
-{
-    char *p = str;
-
-    if (p == NULL) {
-        return;
-    }
-
-    if ((col >= s_st7789_cfg.column) || (row >= s_st7789_cfg.row)) {
-        return;
-    }
-
-    if (s_st7789_cfg.column - col < FONT_ASCII_GENERAL_COL) {
-        col = 0;
-        row += FONT_ASCII_GENERAL_ROW;
-    }
-
-    if (s_st7789_cfg.row - row < FONT_ASCII_GENERAL_ROW) {
-        return;
-    }
-
-    while(p[0] != '\0') {
-        st7789_set_window(col, row, col + FONT_ASCII_GENERAL_COL - 1, row + FONT_ASCII_GENERAL_ROW - 1);
-        st7789_show_single_char(p[0]);
-
-        p++;
-        col += FONT_ASCII_GENERAL_COL;
-
-        if (abs(s_st7789_cfg.column - col) < FONT_ASCII_GENERAL_COL) {
-            col = 0;
-            row += FONT_ASCII_GENERAL_ROW;
-        }
-
-        if (abs(s_st7789_cfg.row - row) < FONT_ASCII_GENERAL_ROW) {
-            return;
-        }
-    }
-}
-
-void st7789_show_chinese_char(uint16_t col, uint16_t row, uint8_t *buf, uint32_t buf_len)
-{
-    uint8_t *p = buf;
-    uint16_t color = COLOR_BLACK;
-
-    if (p == NULL) {
-        return;
-    }
-
-    if (s_st7789_cfg.column - col < FONT_CHINESE_CHAR_GENERAL_COL) {
-        col = 0;
-        row += FONT_CHINESE_CHAR_GENERAL_ROW;
-    }
-
-    if (s_st7789_cfg.row - row < FONT_CHINESE_CHAR_GENERAL_ROW) {
-        return;
-    }
-
-    st7789_set_window(col, row, col + FONT_CHINESE_CHAR_GENERAL_COL - 1, row + FONT_CHINESE_CHAR_GENERAL_ROW - 1);
-
-    for (uint32_t i = 0; i < buf_len; i++) {
-        for (int8_t y = 7; y >= 0; y--) {
-            if (buf[i] & (0x01 << y)) {
-                color = COLOR_BLACK;
-            } else {
-                color = COLOR_WHITE;
-            }
-
             st7789_set_color(color);
         }
     }
