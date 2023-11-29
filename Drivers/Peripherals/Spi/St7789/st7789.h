@@ -33,10 +33,6 @@ bool st7789_set_window(uint16_t start_col, uint16_t start_row, uint16_t end_col,
 void st7789_full_screen_clear(uint16_t color);
 void st7789_pixel_draw(uint16_t col, uint16_t row, uint16_t color);
 
-
-void st7789_show_string(uint16_t col, uint16_t row, char *str);
-void st7789_show_chinese_char(uint16_t col, uint16_t row, uint8_t *buf, uint32_t buf_len);
-
 #ifdef __cplusplus
 }
 #endif /* cplusplus */

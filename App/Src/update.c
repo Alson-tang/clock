@@ -1,3 +1,5 @@
+#include <string.h>
+
 #include "update.h"
 #include "clk.h"
 #include "astronaut.h"

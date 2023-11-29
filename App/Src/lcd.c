@@ -26,26 +26,39 @@ static void lcd_show_single_ascii(uint16_t color, char c, uint8_t width, uint8_t
     uint16_t index = 0;
     uint16_t bytes_per_col = 0;
     uint16_t pixel_color = COLOR_BLACK;
+    uint16_t loop = 0;
+
+    bytes_per_col = width >> 3;
+    if (width & (0x07)) {
+        bytes_per_col += 1;
+    }
 
     if ((width == FONT_ASCII_GENERAL_COL) && (height == FONT_ASCII_GENERAL_ROW)) {
-        index = (c - ' ') * 16;
+        index = c - ' ';
 
-        for (uint8_t i = 0; i < height; i++) {
-            data = asc2_0816[index + i];
+        for (uint16_t i = 0; i < height; i++) {
+            for (uint16_t j = 0; j < bytes_per_col; j++) {
+                data = asc2_1224[index][(i * bytes_per_col) + j];
 
-            for (int8_t y = width - 1; y >= 0; y--) {
-                if (data & (0x01 << y)) {
-                    pixel_color = color;
+                if (((j + 1) << 3) <= (uint16_t)width) {
+                    loop = 8;
                 } else {
-                    pixel_color = s_back_color;
+                    loop = ((uint16_t)width - (j << 3));
                 }
 
-                st7789_set_color(pixel_color);
+                for (uint16_t k = 0; k < loop; k++) {
+                    if (data & (0x80 >> k)) {
+                        pixel_color = color;
+                    } else {
+                        pixel_color = s_back_color;
+                    }
+
+                    st7789_set_color(pixel_color);
+                }
             }
         }
     } else {
         index = c - '0';
-        bytes_per_col = width >> 3;
 
         for (uint8_t i = 0; i < height; i++) {
             for (uint8_t j = 0; j < bytes_per_col; j++) {

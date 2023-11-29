@@ -8,12 +8,10 @@ extern "C" {
 #include "stm32f1xx_hal.h"
 #include "st7789.h"
 
-// #define ASTRONAUT_COL                   (96)
-// #define ASTRONAUT_ROW                   (62)
 #define ASTRONAUT_COL                   (64)
 #define ASTRONAUT_ROW                   (41)
-#define ASTRONAUT_SHOW_COL              (144)
-#define ASTRONAUT_SHOW_ROW              (178)
+#define ASTRONAUT_SHOW_COL              (176)
+#define ASTRONAUT_SHOW_ROW              (184)
 
 #define ASTRONAUT_IMAGE_SIZE            (ASTRONAUT_COL * ASTRONAUT_ROW)
 
