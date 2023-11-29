@@ -58,9 +58,10 @@ int main(void)
     printf("SPI FLASH ID : 0X%08X\r\n", Flash_ReadFlashID());
 
     lcd_clear_full_screen(COLOR_BLACK);
-    lcd_show_font(16, 16, COLOR_WHITE, "无锡", 24, 24);
-    lcd_show_font(16, 48, COLOR_WHITE, "晴", 24, 24);
-    clk_set(12, 37, 0, 16, 72, COLOR_WHITE);
+    lcd_show_font(16, 16, COLOR_WHITE, "无锡", FONT_CHINESE_CHAR_GENERAL_COL, FONT_CHINESE_CHAR_GENERAL_ROW);
+    lcd_show_font(16, 48, COLOR_WHITE, "晴", FONT_CHINESE_CHAR_GENERAL_COL, FONT_CHINESE_CHAR_GENERAL_ROW);
+    lcd_show_ascii(16, 80, COLOR_WHITE, "23.11.29 Wed", FONT_ASCII_GENERAL_COL, FONT_ASCII_GENERAL_ROW);
+    clk_set(12, 37, 0, 16, 104, COLOR_WHITE);
     astronaut_show();
     weather_show();
     weather_thermometr_show();

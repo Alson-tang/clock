@@ -11,7 +11,7 @@ extern "C" {
 #define ASTRONAUT_COL                   (64)
 #define ASTRONAUT_ROW                   (41)
 #define ASTRONAUT_SHOW_COL              (176)
-#define ASTRONAUT_SHOW_ROW              (184)
+#define ASTRONAUT_SHOW_ROW              (199)
 
 #define ASTRONAUT_IMAGE_SIZE            (ASTRONAUT_COL * ASTRONAUT_ROW)
 
