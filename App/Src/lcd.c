@@ -127,7 +127,7 @@ static void lcd_show_single_font(uint16_t color, uint8_t *utf8, uint8_t width, u
 
 void lcd_clear_full_screen(uint16_t color)
 {
-    st7789_full_screen_clear(color);
+    st7789_screen_clear(color);
     s_back_color = color;
 }
 
