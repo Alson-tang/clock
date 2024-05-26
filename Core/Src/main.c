@@ -52,10 +52,10 @@ int main(void)
     uart_init();
     printf("Hello World\r\n");
 
-    // spi_device_init(SPI_DEVICE_FLASH_W25Q64);
-    spi_device_init(SPI_DEVICE_TFTLCD_ST7789);
+    spi_device_init(SPI_DEVICE_FLASH_W25Q64);
+    printf("SPI FLASH ID : 0x%08X\r\n", Flash_ReadFlashID());
 
-    // printf("SPI FLASH ID : 0X%08X\r\n", Flash_ReadFlashID());
+    spi_device_init(SPI_DEVICE_TFTLCD_ST7789);
 
     // lcd_clear_full_screen(COLOR_BLACK);
     // lcd_show_font(16, 16, COLOR_WHITE, "无锡", FONT_CHINESE_CHAR_GENERAL_COL, FONT_CHINESE_CHAR_GENERAL_ROW);

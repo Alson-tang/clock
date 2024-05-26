@@ -1,18 +1,19 @@
 #include "w25q64_hal.h"
 
 static SPI_HandleTypeDef s_w25q64_hal_spi_handle = { 0 };
+static w25q64_cfg_t s_st_w25q64_cfg = { 0 };
 
-static void w25q64_hal_write(uint8_t *buf, uint16_t size)
+static void hal_w25q64_write(uint8_t *buf, uint16_t size)
 {
     HAL_SPI_Transmit(&s_w25q64_hal_spi_handle, buf, size, 20);
 }
 
-static void w25q64_hal_read(uint8_t *buf, uint16_t size)
+static void hal_w25q64_read(uint8_t *buf, uint16_t size)
 {
     HAL_SPI_Receive(&s_w25q64_hal_spi_handle, buf, size, 20);
 }
 
-static uint8_t w25q64_hal_read_one_byte(uint8_t send_byte)
+static uint8_t hal_w25q64_read_one_byte(uint8_t send_byte)
 {
     uint8_t recv_byte = 0;
 
@@ -21,17 +22,17 @@ static uint8_t w25q64_hal_read_one_byte(uint8_t send_byte)
     return recv_byte;
 }
 
-static void w25q64_hal_cs_select(void)
+static void hal_w25q64_cs_select(void)
 {
     HAL_GPIO_WritePin(W25Q64_SPIx_CS_GPIO_PORT, W25Q64_SPIx_CS_PIN, GPIO_PIN_RESET);
 }
 
-static void w25q64_hal_cs_unselect(void)
+static void hal_w25q64_cs_unselect(void)
 {
     HAL_GPIO_WritePin(W25Q64_SPIx_CS_GPIO_PORT, W25Q64_SPIx_CS_PIN, GPIO_PIN_SET);
 }
 
-void w25q64_hal_init(w25q64_cfg_t * w25q64_cfg)
+w25q64_cfg_t* hal_w25q64_init(void)
 {
     s_w25q64_hal_spi_handle.Instance               = W25Q64_SPIx;
     s_w25q64_hal_spi_handle.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_16;
@@ -48,16 +49,18 @@ void w25q64_hal_init(w25q64_cfg_t * w25q64_cfg)
     HAL_SPI_Init(&s_w25q64_hal_spi_handle);
     __HAL_SPI_ENABLE(&s_w25q64_hal_spi_handle);
 
-    w25q64_cfg->write = w25q64_hal_write;
-    w25q64_cfg->read = w25q64_hal_read;
-    w25q64_cfg->read_one_byte = w25q64_hal_read_one_byte;
-    w25q64_cfg->cs_select = w25q64_hal_cs_select;
-    w25q64_cfg->cs_unselect = w25q64_hal_cs_unselect;
+    s_st_w25q64_cfg.write = hal_w25q64_write;
+    s_st_w25q64_cfg.read = hal_w25q64_read;
+    s_st_w25q64_cfg.read_one_byte = hal_w25q64_read_one_byte;
+    s_st_w25q64_cfg.cs_select = hal_w25q64_cs_select;
+    s_st_w25q64_cfg.cs_unselect = hal_w25q64_cs_unselect;
+
+    return &s_st_w25q64_cfg;
 }
 
-void w25q64_hal_spi_map_init(void)
+void hal_w25q64_hardware_init_cb(void)
 {
-    GPIO_InitTypeDef  GPIO_InitStruct;
+    GPIO_InitTypeDef  GPIO_InitStruct = { 0 };
 
     W25Q64_SPIx_SCK_GPIO_CLK_ENABLE();
     W25Q64_SPIx_MISO_GPIO_CLK_ENABLE();
@@ -65,8 +68,6 @@ void w25q64_hal_spi_map_init(void)
     W25Q64_SPIx_CS_GPIO_CLK_ENABLE();
 
     W25Q64_SPIx_CLK_ENABLE();
-    // __HAL_AFIO_REMAP_SPI1_ENABLE();
-    // __HAL_AFIO_REMAP_SWJ_NOJTAG(); 
 
     GPIO_InitStruct.Pin     = W25Q64_SPIx_SCK_PIN;
     GPIO_InitStruct.Mode    = GPIO_MODE_AF_PP;

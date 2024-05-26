@@ -8,24 +8,24 @@ extern "C" {
 #include "stm32f1xx_hal.h"
 #include "w25q64.h"
 
-#define W25Q64_SPIx                             SPI1
-#define W25Q64_SPIx_CLK_ENABLE()                __HAL_RCC_SPI1_CLK_ENABLE()
-#define W25Q64_SPIx_SCK_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOA_CLK_ENABLE()
-#define W25Q64_SPIx_MISO_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOA_CLK_ENABLE()
-#define W25Q64_SPIx_MOSI_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOA_CLK_ENABLE()
-#define W25Q64_SPIx_CS_GPIO_CLK_ENABLE()        __HAL_RCC_GPIOA_CLK_ENABLE()
+#define W25Q64_SPIx                             SPI2
+#define W25Q64_SPIx_CLK_ENABLE()                __HAL_RCC_SPI2_CLK_ENABLE()
+#define W25Q64_SPIx_SCK_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOB_CLK_ENABLE()
+#define W25Q64_SPIx_MISO_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOB_CLK_ENABLE()
+#define W25Q64_SPIx_MOSI_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOB_CLK_ENABLE()
+#define W25Q64_SPIx_CS_GPIO_CLK_ENABLE()        __HAL_RCC_GPIOB_CLK_ENABLE()
 
-#define W25Q64_SPIx_SCK_PIN                     GPIO_PIN_5
-#define W25Q64_SPIx_SCK_GPIO_PORT               GPIOA
-#define W25Q64_SPIx_MISO_PIN                    GPIO_PIN_6
-#define W25Q64_SPIx_MISO_GPIO_PORT              GPIOA
-#define W25Q64_SPIx_MOSI_PIN                    GPIO_PIN_7
-#define W25Q64_SPIx_MOSI_GPIO_PORT              GPIOA
-#define W25Q64_SPIx_CS_PIN                      GPIO_PIN_4
-#define W25Q64_SPIx_CS_GPIO_PORT                GPIOA
+#define W25Q64_SPIx_SCK_PIN                     GPIO_PIN_13
+#define W25Q64_SPIx_SCK_GPIO_PORT               GPIOB
+#define W25Q64_SPIx_MISO_PIN                    GPIO_PIN_14
+#define W25Q64_SPIx_MISO_GPIO_PORT              GPIOB
+#define W25Q64_SPIx_MOSI_PIN                    GPIO_PIN_15
+#define W25Q64_SPIx_MOSI_GPIO_PORT              GPIOB
+#define W25Q64_SPIx_CS_PIN                      GPIO_PIN_12
+#define W25Q64_SPIx_CS_GPIO_PORT                GPIOB
 
-void w25q64_hal_init(w25q64_cfg_t * w25q64_cfg);
-void w25q64_hal_spi_map_init(void);
+w25q64_cfg_t* hal_w25q64_init(void);
+void hal_w25q64_hardware_init_cb(void);
 
 #ifdef __cplusplus
 }
