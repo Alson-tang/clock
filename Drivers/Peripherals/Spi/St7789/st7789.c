@@ -1,9 +1,4 @@
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-
 #include "st7789.h"
-#include "font.h"
 
 #define ST7789_CMD_MEMORY_DATA_ACCESS_CONTROL                   (0x36)
 #define ST7789_DATA_MEMORY_DATA_ACCESS_CONTROL                  (0x00)
@@ -84,7 +79,23 @@
 
 static st7789_cfg_t s_st7789_cfg = { 0 };
 
-static void st7789_reset(void)
+static void st7789_write_single_byte_data(uint8_t data)
+{
+    s_st7789_cfg.data_select();
+    s_st7789_cfg.write(&data, 1);
+}
+
+void st7789_cmd_select(void)
+{
+    s_st7789_cfg.cmd_select();
+}
+
+void st7789_data_select(void)
+{
+    s_st7789_cfg.data_select();
+}
+
+void st7789_reset(void)
 {
     s_st7789_cfg.rst_unselect();
     HAL_Delay(s_st7789_cfg.rst_hold_time_ms);
@@ -94,16 +105,15 @@ static void st7789_reset(void)
     HAL_Delay(s_st7789_cfg.rst_hold_time_ms);
 }
 
-static void st7789_write_cmd(uint8_t cmd)
+void st7789_unreset(void)
+{
+    s_st7789_cfg.rst_unselect();
+}
+
+void st7789_write_cmd(uint8_t cmd)
 {
     s_st7789_cfg.cmd_select();
     s_st7789_cfg.write(&cmd, 1);
-}
-
-static void st7789_write_single_byte_data(uint8_t data)
-{
-    s_st7789_cfg.data_select();
-    s_st7789_cfg.write(&data, 1);
 }
 
 void st7789_set_color(uint16_t color)
@@ -115,20 +125,10 @@ void st7789_set_color(uint16_t color)
     st7789_write_single_byte_data(low);
 }
 
-bool st7789_set_window(uint16_t start_col, uint16_t start_row, uint16_t end_col, uint16_t end_row)
+void st7789_set_window(uint16_t start_col, uint16_t start_row, uint16_t end_col, uint16_t end_row)
 {
     uint8_t high = 0;
     uint8_t low = 0;
-
-    if ((end_col >= s_st7789_cfg.column) || (end_row >= s_st7789_cfg.row)) {
-        printf("The set coordinates exceed the screen size\r\n");
-        return false;
-    }
-
-    if ((start_col > end_col) || (start_row > end_row)) {
-        printf("Window coordinates invalid\r\n");
-        return false;
-    }
 
     st7789_write_cmd(ST7789_CMD_COLUMN_ADDRESS_SET);
 
@@ -155,8 +155,6 @@ bool st7789_set_window(uint16_t start_col, uint16_t start_row, uint16_t end_col,
     st7789_write_single_byte_data(low);
 
     st7789_write_cmd(ST7789_CMD_MEMORY_WRITE);
-
-    return true;
 }
 
 void st7789_init(st7789_cfg_t * st7789_cfg)
@@ -245,7 +243,13 @@ void st7789_init(st7789_cfg_t * st7789_cfg)
     st7789_write_cmd(ST7789_CMD_DISPLAY_ON);
 }
 
-void st7789_full_screen_clear(uint16_t color)
+void st7789_pixel_draw(uint16_t col, uint16_t row, uint16_t color)
+{
+    st7789_set_window(col, row, col, row);
+    st7789_set_color(color);
+}
+
+void st7789_screen_clear(color_t color)
 {
     st7789_set_window(0, 0, s_st7789_cfg.column - 1, s_st7789_cfg.row - 1);
 
@@ -254,13 +258,4 @@ void st7789_full_screen_clear(uint16_t color)
             st7789_set_color(color);
         }
     }
-}
-
-void st7789_pixel_draw(uint16_t col, uint16_t row, uint16_t color)
-{
-    if (st7789_set_window(col, row, col, row) == false) {
-        return;
-    }
-
-    st7789_set_color(color);
 }
