@@ -5,6 +5,7 @@
 #include "st7789_hal.h"
 #include "st7789.h"
 #include "font.h"
+#include "num.h"
 #include "led.h"
 
 typedef struct
@@ -382,7 +383,7 @@ void lcd_show_clock_num_s(uint16_t color, char *num)
     }
 }
 
-void lcd_show_clock_num(char *hour, char *min, char *second, uint16_t col, uint16_t row, uint16_t color)
+void lcd_show_clock_num(char *hour, uint16_t hour_color, char *min, uint16_t min_color, char *second, uint16_t second_color, uint16_t col, uint16_t row)
 {
     if ((hour == NULL) || (min == NULL) || (second == NULL)) {
         return;
@@ -396,9 +397,9 @@ void lcd_show_clock_num(char *hour, char *min, char *second, uint16_t col, uint1
     s_clk_location.second_col = col + 4 * FONT_CLOCK_NUM_HM_COL;
     s_clk_location.second_row = row + (FONT_CLOCK_NUM_HM_ROW >> 1) - 9;
 
-    lcd_show_clock_num_h(color, hour);
-    lcd_show_clock_num_m(color, min);
-    lcd_show_clock_num_s(color, second);
+    lcd_show_clock_num_h(hour_color, hour);
+    lcd_show_clock_num_m(min_color, min);
+    lcd_show_clock_num_s(second_color, second);
 }
 
 uint16_t lcd_get_back_color(void)

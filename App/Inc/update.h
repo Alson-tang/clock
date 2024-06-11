@@ -9,7 +9,7 @@ extern "C" {
 
 extern TIM_HandleTypeDef g_update_tim_handle;
 
-void update_init(uint32_t clk_update_time, uint32_t astronaut_time);
+void update_init(void);
 void update_start(void);
 
 #ifdef __cplusplus
