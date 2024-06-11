@@ -653,6 +653,11 @@
               <FileType>1</FileType>
               <FilePath>..\App\Src\update.c</FilePath>
             </File>
+            <File>
+              <FileName>num.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\Src\num.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

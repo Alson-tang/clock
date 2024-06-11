@@ -39,11 +39,13 @@ void lcd_show_clock_num_m(uint16_t color, char *num);
 void lcd_show_clock_num_s(uint16_t color, char *num);
 
 void lcd_show_clock_num(char *hour,
+                        uint16_t hour_color,
                         char *min,
+                        uint16_t min_color,
                         char *second,
+                        uint16_t second_color,
                         uint16_t col,
-                        uint16_t row,
-                        uint16_t color);
+                        uint16_t row);
 
 uint16_t lcd_get_back_color(void);
 

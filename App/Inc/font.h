@@ -16,10 +16,6 @@ extern "C" {
 #define FONT_CLOCK_NUM_S_COL            (24)
 #define FONT_CLOCK_NUM_S_ROW            (48)
 
-extern const uint8_t asc2_4096[10][480];
-extern const uint8_t asc2_2448[10][144];
-extern const uint8_t asc2_1224[95][48];
-
 uint16_t utf8_to_gbk(uint8_t *utf8);
 void get_font_dis_array(uint16_t gbk, uint8_t *buf, uint32_t len);
 
