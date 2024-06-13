@@ -35,13 +35,18 @@
 #include "astronaut.h"
 #include "weather.h"
 #include "update.h"
+#include "esp32_hardware.h"
 
 osThreadId defaultTaskHandle;
-osThreadId main_logicHandle;
+osThreadId main_logic_handle = NULL;
+osThreadId xmodem_handle = NULL;
+osThreadId astronaut_logic_handle = NULL;
 
 void SystemClock_Config(void);
 void StartDefaultTask(void const * argument);
-void main_logic_handle(void const * argument);
+void main_logic_handle_func(void const * argument);
+extern void xmodem_handle_func(void const * argument);
+extern void astronaut_logic_handle_func(void const * argument);
 
 int main(void)
 {
@@ -79,24 +84,34 @@ int main(void)
     };
     clk_set(&clk);
 
-    // lcd_show_font(16, 16, COLOR_WHITE, "无锡", FONT_CHINESE_CHAR_GENERAL_COL, FONT_CHINESE_CHAR_GENERAL_ROW);
-    // lcd_show_font(16, 48, COLOR_WHITE, "晴", FONT_CHINESE_CHAR_GENERAL_COL, FONT_CHINESE_CHAR_GENERAL_ROW);
-    // lcd_show_ascii(16, 80, COLOR_WHITE, "23.11.29 Wed", FONT_ASCII_GENERAL_COL, FONT_ASCII_GENERAL_ROW);
-    // astronaut_show();
-    // weather_show();
-    // weather_thermometr_show();
-    // weather_temperature_bar_show(17, COLOR_YELLOW);
+    lcd_show_font(16, 16, COLOR_WHITE, "正", FONT_CHINESE_CHAR_GENERAL_COL, FONT_CHINESE_CHAR_GENERAL_ROW);
+    lcd_show_font(16, 16, COLOR_WHITE, "无锡", FONT_CHINESE_CHAR_GENERAL_COL, FONT_CHINESE_CHAR_GENERAL_ROW);
+    lcd_show_font(16, 48, COLOR_WHITE, "晴", FONT_CHINESE_CHAR_GENERAL_COL, FONT_CHINESE_CHAR_GENERAL_ROW);
+    lcd_show_ascii(16, 80, COLOR_WHITE, "23.11.29 Wed", FONT_ASCII_GENERAL_COL, FONT_ASCII_GENERAL_ROW);
+    astronaut_show();
+    weather_show();
+    weather_thermometr_show();
+    weather_temperature_bar_show(17, COLOR_YELLOW);
     update_init();
+
+    esp32_hardware_init();
+    esp32_hardware_power_off();
 
     // /* if (1) {
     //   update_font_lib(FONT_LIB_TYPE_GBK);
     // } */
 
-    osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 128);
+    osThreadDef(defaultTask, StartDefaultTask, 0, 0, 128);
     defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
-    osThreadDef(main_logic, main_logic_handle, osPriorityLow, 0, 128);
-    main_logicHandle = osThreadCreate(osThread(main_logic), NULL);
+    osThreadDef(main_logic, main_logic_handle_func, 1, 0, 128);
+    main_logic_handle = osThreadCreate(osThread(main_logic), NULL);
+
+    // osThreadDef(xmodem, xmodem_handle_func, 2, 0, 128);
+    // xmodem_handle = osThreadCreate(osThread(xmodem), NULL);
+
+    // osThreadDef(astronaut_logic, astronaut_logic_handle_func, 7, 0, 128);
+    // astronaut_logic_handle = osThreadCreate(osThread(astronaut_logic), NULL);
 
     osKernelStart();
 
@@ -169,7 +184,7 @@ void StartDefaultTask(void const * argument)
 * @retval None
 */
 /* USER CODE END Header_main_logic_handle */
-void main_logic_handle(void const * argument)
+void main_logic_handle_func(void const * argument)
 {
     /* for(;;)
     {
@@ -192,7 +207,7 @@ void main_logic_handle(void const * argument)
     }
 }
 
-void astronaut_logic_handle(void const * argument)
+void astronaut_logic_handle_func(void const * argument)
 {
     for(;;) {
         astronaut_update();

@@ -50,7 +50,7 @@ static COM_StatusTypeDef font_download(void)
 
 bool update_font_lib(font_lib_type font_type)
 {
-    __HAL_UART_FLUSH_DRREGISTER(&g_update_font_lib_uart_handle);
+    __HAL_UART_FLUSH_DRREGISTER(p_g_update_font_lib_uart_handle);
 
     Serial_PutString((uint8_t *)"\n\r");
     if (font_download() == COM_OK) {

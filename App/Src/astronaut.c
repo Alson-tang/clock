@@ -359,7 +359,7 @@ static void astronaut_show_single_frame(uint8_t num)
 
     for (uint8_t i = 0; i < ASTRONAUT_ROW; i++) {
         FLASH_BufferRead(s_astronaut_buf, addr + i * ASTRONAUT_BYTES_PER_COL, ASTRONAUT_BYTES_PER_COL);
-        // memcpy(s_astronaut_buf, &gImage_1[i * ASTRONAUT_BYTES_PER_COL], ASTRONAUT_BYTES_PER_COL);
+        memcpy(s_astronaut_buf, &gImage_1[i * ASTRONAUT_BYTES_PER_COL], ASTRONAUT_BYTES_PER_COL);
         lcd_show_bmp(s_astronaut_buf, ASTRONAUT_COL);
     }
 }
