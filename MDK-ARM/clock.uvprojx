@@ -339,7 +339,7 @@
               <MiscControls> --no-multibyte-chars</MiscControls>
               <Define>USE_HAL_DRIVER,STM32F103xE</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;../Drivers/STM32F1xx_HAL_Driver/Inc;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM3;../Drivers/CMSIS/Device/ST/STM32F1xx/Include;../Drivers/CMSIS/Include;..\Drivers\Peripherals\Key;..\Drivers\Peripherals\Led;..\Drivers\Peripherals\Uart;..\Drivers\Peripherals\Spi;..\Drivers\Peripherals\Spi\W25q64_hal;..\Drivers\Peripherals\Spi\W25q64;..\Drivers\Peripherals\Spi\St7789_hal;..\Drivers\Peripherals\Spi\St7789;..\App\Inc</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;../Drivers/STM32F1xx_HAL_Driver/Inc;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM3;../Drivers/CMSIS/Device/ST/STM32F1xx/Include;../Drivers/CMSIS/Include;..\Drivers\Peripherals\Key;..\Drivers\Peripherals\Led;..\Drivers\Peripherals\Uart;..\Drivers\Peripherals\Spi;..\Drivers\Peripherals\Spi\W25q64_hal;..\Drivers\Peripherals\Spi\W25q64;..\Drivers\Peripherals\Spi\St7789_hal;..\Drivers\Peripherals\Spi\St7789;..\App\Inc;..\Drivers\Peripherals\Esp32</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -603,6 +603,11 @@
               <FileType>1</FileType>
               <FilePath>..\Drivers\Peripherals\Spi\St7789_hal\st7789_hal.c</FilePath>
             </File>
+            <File>
+              <FileName>esp32_hardware.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\Peripherals\Esp32\esp32_hardware.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -657,6 +662,11 @@
               <FileName>num.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\App\Src\num.c</FilePath>
+            </File>
+            <File>
+              <FileName>xmodem_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\Src\xmodem_app.c</FilePath>
             </File>
           </Files>
         </Group>

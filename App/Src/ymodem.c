@@ -33,7 +33,7 @@ static HAL_StatusTypeDef ReceivePacket(uint8_t *p_data, uint32_t *p_length, uint
     uint8_t char1;
 
     *p_length = 0;
-    status = HAL_UART_Receive(&g_update_font_lib_uart_handle, &char1, 1, timeout);  // 接收一个字节数据
+    status = HAL_UART_Receive(p_g_update_font_lib_uart_handle, &char1, 1, timeout);  // 接收一个字节数据
 
     if (status == HAL_OK)
     {
@@ -48,7 +48,7 @@ static HAL_StatusTypeDef ReceivePacket(uint8_t *p_data, uint32_t *p_length, uint
             case EOT:                         // EOT表示传输完成
                 break;
             case CA:                          // 连续收到两个CA(Cancel)表示取消传输
-                if ((HAL_UART_Receive(&g_update_font_lib_uart_handle, &char1, 1, timeout) == HAL_OK) && (char1 == CA)) //再接收到一个CA
+                if ((HAL_UART_Receive(p_g_update_font_lib_uart_handle, &char1, 1, timeout) == HAL_OK) && (char1 == CA)) //再接收到一个CA
                     packet_size = 2;          // 定义包大小2字节
                 else
                     status = HAL_ERROR;
@@ -69,7 +69,7 @@ static HAL_StatusTypeDef ReceivePacket(uint8_t *p_data, uint32_t *p_length, uint
         {
             // printf("alson-%s, %d\r\n", __func__, __LINE__);
             // 串口接收数据(保存位置:p_data[2]开始  保存长度:数据长度+数据包其它信息-数据包起始信号
-            status = HAL_UART_Receive(&g_update_font_lib_uart_handle, &p_data[PACKET_NUMBER_INDEX], packet_size + PACKET_OVERHEAD_SIZE - 1, timeout);
+            status = HAL_UART_Receive(p_g_update_font_lib_uart_handle, &p_data[PACKET_NUMBER_INDEX], packet_size + PACKET_OVERHEAD_SIZE - 1, timeout);
             // printf("alson-%s, %d, status : %d, len is : %d\r\n", __func__, __LINE__, status, packet_size + PACKET_OVERHEAD_SIZE - 1);
 
             if (status == HAL_OK) // 简单的检查数据包完整性
@@ -260,8 +260,8 @@ COM_StatusTypeDef Ymodem_Receive(uint32_t *p_size)
                                         // {
                                         // 	// 超出限制,结束会话
                                         // 	tmp = CA;
-                                        // 	HAL_UART_Transmit(&g_update_font_lib_uart_handle, &tmp, 1, NAK_TIMEOUT);
-                                        // 	HAL_UART_Transmit(&g_update_font_lib_uart_handle, &tmp, 1, NAK_TIMEOUT);
+                                        // 	HAL_UART_Transmit(p_g_update_font_lib_uart_handle, &tmp, 1, NAK_TIMEOUT);
+                                        // 	HAL_UART_Transmit(p_g_update_font_lib_uart_handle, &tmp, 1, NAK_TIMEOUT);
                                         // 	result = COM_LIMIT;
                                         // }
 
