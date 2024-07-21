@@ -1,4 +1,3 @@
-/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file           : main.h
@@ -16,9 +15,6 @@
   *
   ******************************************************************************
   */
-/* USER CODE END Header */
-
-/* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __MAIN_H
 #define __MAIN_H
 
@@ -33,38 +29,30 @@ extern "C" {
 
 #include "stm32f1xx_hal.h"
 
-/* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
+#include "FreeRTOS.h"
+#include "task.h"
+#include "queue.h"
+#include "event_groups.h"
 
-/* USER CODE END Includes */
+#include "system.h"
+#include "uart.h"
+#include "spi_device.h"
+#include "w25q64.h"
+#include "st7789.h"
+#include "update_font_lib.h"
+#include "font.h"
+#include "lcd.h"
+#include "clk.h"
+#include "astronaut.h"
+#include "weather.h"
+#include "update.h"
+#include "esp32_hardware.h"
+#include "esp32.h"
 
-/* Exported types ------------------------------------------------------------*/
-/* USER CODE BEGIN ET */
+extern QueueHandle_t g_queue_network_handle;
+extern EventGroupHandle_t g_event_group_handle;
 
-/* USER CODE END ET */
-
-/* Exported constants --------------------------------------------------------*/
-/* USER CODE BEGIN EC */
-
-/* USER CODE END EC */
-
-/* Exported macro ------------------------------------------------------------*/
-/* USER CODE BEGIN EM */
-
-/* USER CODE END EM */
-
-/* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
-
-/* USER CODE BEGIN EFP */
-
-/* USER CODE END EFP */
-
-/* Private defines -----------------------------------------------------------*/
-
-/* USER CODE BEGIN Private defines */
-
-/* USER CODE END Private defines */
 
 #ifdef __cplusplus
 }
