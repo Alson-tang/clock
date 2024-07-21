@@ -1,9 +1,13 @@
 # VS Code Settings
 .vscode/
 
-# Objects
+# Project
+MDK-ARM/DebugConfig
+MDK-ARM/RTE
 MDK-ARM/Objects
 MDK-ARM/clock.uvguix.TangXiang
+MDK-ARM/clock.uvguix.tx_da
+MDK-ARM/*.lst
 
 # Software
 Software/
