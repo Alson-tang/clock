@@ -33,6 +33,7 @@ extern "C" {
 #include "task.h"
 #include "queue.h"
 #include "event_groups.h"
+#include "semphr.h"
 
 #include "system.h"
 #include "uart.h"
@@ -47,10 +48,13 @@ extern "C" {
 #include "weather.h"
 #include "update.h"
 #include "esp32_hardware.h"
+#include "at.h"
 #include "esp32.h"
+#include "state.h"
 
 extern QueueHandle_t g_queue_network_handle;
 extern EventGroupHandle_t g_event_group_handle;
+extern SemaphoreHandle_t g_semaphore_handle;
 
 void Error_Handler(void);
 

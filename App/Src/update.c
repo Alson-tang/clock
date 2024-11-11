@@ -43,5 +43,6 @@ void update_init(void)
 
 void update_start(void)
 {
+    HAL_TIM_Base_Stop_IT(&g_update_tim_handle);
     HAL_TIM_Base_Start_IT(&g_update_tim_handle);
 }

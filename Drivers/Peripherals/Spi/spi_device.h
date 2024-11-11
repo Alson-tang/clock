@@ -9,7 +9,7 @@ extern "C" {
 
 typedef enum
 {
-   SPI_DEVICE_FLASH_W25Q64,
+   SPI_DEVICE_FLASH_W25Q128,
    SPI_DEVICE_TFTLCD_ST7789,
    SPI_DEVICE_MAX
 } spi_device_type;

@@ -206,16 +206,20 @@ void TIM2_IRQHandler(void)
 /******************************************************************************/
 void USART2_IRQHandler(void)
 {
-    if (__HAL_UART_GET_FLAG(&s_st_esp32_uart_handle, UART_FLAG_IDLE) != RESET) {                                        /* 获取接收 IDLE 标志位是否被置位 */
+    esp32_hardware_cfg_t *p_esp32_hardware_cfg = NULL;
+
+    p_esp32_hardware_cfg = esp32_hardware_cfg_get();
+
+    if (__HAL_UART_GET_FLAG(&p_esp32_hardware_cfg->uart_handle, UART_FLAG_IDLE) != RESET) {                                        /* 获取接收 IDLE 标志位是否被置位 */
         message_t message = { 0 };
         esp32_info_t *p_esp32_info = NULL;
         BaseType_t xHigherPriorityTaskWoken = pdFALSE;
 
         p_esp32_info = esp32_info_get();
 
-        __HAL_UART_CLEAR_IDLEFLAG(&s_st_esp32_uart_handle);
-        HAL_UART_DMAStop(&s_st_esp32_uart_handle);                                                                      /* 停止 DMA 传输，防止干扰 */
-        message.recv_len = p_esp32_info->p_rx_dma_buf_cfg->buf_len - __HAL_DMA_GET_COUNTER(&s_st_esp32_dma_handle);     /* 获取接收到的数据长度 */
+        __HAL_UART_CLEAR_IDLEFLAG(&p_esp32_hardware_cfg->uart_handle);
+        HAL_UART_DMAStop(&p_esp32_hardware_cfg->uart_handle);                                                                      /* 停止 DMA 传输，防止干扰 */
+        message.recv_len = p_esp32_info->p_rx_dma_buf_cfg->buf_len - __HAL_DMA_GET_COUNTER(&p_esp32_hardware_cfg->dma_handle);     /* 获取接收到的数据长度 */
         message.buf_index = (uint8_t)p_esp32_info->p_rx_dma_buf_cfg->buf_index;
 
         xQueueSendFromISR(g_queue_network_handle, (const void*)&message, &xHigherPriorityTaskWoken);
