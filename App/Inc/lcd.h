@@ -7,6 +7,19 @@ extern "C" {
 
 #include "stm32f1xx_hal.h"
 
+/* TFTLCD 默认各信息显示位置 */
+#define LCD_SET_CITY_COL_DEF                        (16)
+#define LCD_SET_CITY_ROW_DEF                        (16)
+#define LCD_SET_CITY_STR_DEF                        ("无锡")
+
+#define LCD_SET_WEATHER_COL_DEF                     (16)
+#define LCD_SET_WEATHER_ROW_DEF                     (48)
+#define LCD_SET_WEATHER_STR_DEF                     ("晴")
+
+#define LCD_SET_DATE_COL_DEF                        (16)
+#define LCD_SET_DATE_ROW_DEF                        (80)
+#define LCD_SET_DATE_STR_DEF                        ("2023.11.29 Wed")
+
 void lcd_clear_full_screen(uint16_t color);
 
 void lcd_show_ascii(uint16_t col,

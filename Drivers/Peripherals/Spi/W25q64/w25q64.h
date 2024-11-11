@@ -4,7 +4,7 @@
 #include "stm32f1xx_hal.h"
 
 /************************* SPI Flash 相关定义 *************************/
-#define W25Q64
+#define W25Q128
 
 #if defined W25Q16
 #define FLASH_ID                        0xEF3015

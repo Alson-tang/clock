@@ -8,7 +8,7 @@ UART_HandleTypeDef *p_g_update_font_lib_uart_handle = &s_debug_uart_handle;
 void uart_init(void)
 {
     s_debug_uart_handle.Instance        = DEBUG_UART_NUM;
-    s_debug_uart_handle.Init.BaudRate   = 115200;
+    s_debug_uart_handle.Init.BaudRate   = 9600;
     s_debug_uart_handle.Init.WordLength = UART_WORDLENGTH_8B;
     s_debug_uart_handle.Init.StopBits   = UART_STOPBITS_1;
     s_debug_uart_handle.Init.Parity     = UART_PARITY_NONE;
@@ -65,7 +65,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
   */
 int fputc(int ch, FILE *f)
 {
-    HAL_UART_Transmit(&s_debug_uart_handle, (uint8_t *)&ch, 1, 0xFFFF);
+    HAL_UART_Transmit(&s_debug_uart_handle, (uint8_t *)&ch, 1, HAL_MAX_DELAY);
 
     return ch;
 }

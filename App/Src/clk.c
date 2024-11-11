@@ -84,3 +84,63 @@ void clk_set(clk_t *p_clk)
                     s_st_clk.clk_location.col,
                     s_st_clk.clk_location.row);
 }
+
+void clk_get(clk_t *p_clk)
+{
+    memcpy((void*)p_clk, (void*)&s_st_clk, sizeof(clk_t));
+}
+
+uint8_t clk_month_convert(char *month)
+{
+    uint8_t month_num = 1;
+
+    if (strstr(month, "Jan") != NULL) {
+        month_num = 1;
+    }
+
+    if (strstr(month, "Feb") != NULL) {
+        month_num = 2;
+    }
+
+    if (strstr(month, "Mar") != NULL) {
+        month_num = 3;
+    }
+
+    if (strstr(month, "Apr") != NULL) {
+        month_num = 4;
+    }
+
+    if (strstr(month, "May") != NULL) {
+        month_num = 5;
+    }
+
+    if (strstr(month, "Jun") != NULL) {
+        month_num = 6;
+    }
+
+    if (strstr(month, "Jul") != NULL) {
+        month_num = 7;
+    }
+
+    if (strstr(month, "Aug") != NULL) {
+        month_num = 8;
+    }
+
+    if (strstr(month, "Sep") != NULL) {
+        month_num = 9;
+    }
+
+    if (strstr(month, "Oct") != NULL) {
+        month_num = 10;
+    }
+
+    if (strstr(month, "Nov") != NULL) {
+        month_num = 11;
+    }
+
+    if (strstr(month, "Dec") != NULL) {
+        month_num = 12;
+    }
+
+    return month_num;
+}

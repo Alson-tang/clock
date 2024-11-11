@@ -18,7 +18,7 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef *hspi)
 void spi_device_init(spi_device_type device)
 {
     switch (device) {
-        case SPI_DEVICE_FLASH_W25Q64: {
+        case SPI_DEVICE_FLASH_W25Q128: {
             w25q64_cfg_t *p_w25q64_cfg = NULL;
 
             p_w25q64_cfg = hal_w25q64_init();
