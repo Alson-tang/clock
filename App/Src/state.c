@@ -9,6 +9,7 @@ static action_map_t s_arr_action_map[] = {
     { STATE_WIFI_CONNECTED,         state_wifi_connected_entry,         state_wifi_connected_running,       state_wifi_connected_exti },
     { STATE_WIFI_DISCONNECTED,      state_wifi_disconnected_entry,      state_wifi_disconnected_running,    state_wifi_disconnected_exti },
     { STATE_SYNC_TIME,              state_sync_time_entry,              state_sync_time_running,            state_sync_time_exti },
+    { STATE_WEATHER_GET,            state_weather_get_entry,            state_weather_get_running,          state_weather_get_exti },
 };
 
 /* “事件” 和 “状态” 映射表 */
@@ -19,6 +20,7 @@ static event_map_t s_arr_event_map[] = {
     { EVENT_WIFI_CONNECTED,          STATE_WIFI_CONNECTED },
     { EVENT_WIFI_DISCONNECTED,       STATE_WIFI_DISCONNECTED },
     { EVENT_SYNC_TIME,               STATE_SYNC_TIME },
+    { EVENT_WEATHER_GET,             STATE_WEATHER_GET },
     { EVENT_RUNNING,                 STATE_RUNNING },
 };
 
@@ -46,7 +48,6 @@ void state_start_exti(void)
 void state_esp32_power_on_entry(void)
 {
     ESP32_HARDWARE_POWER_ON;
-    LOG_DEBUG("after");
 
     return;
 }
@@ -66,16 +67,19 @@ void state_init_entry(void)
     wifi_info_t wifi_info = { WIFI_NOT_CONNECTED, 0 };
     event_e event = EVENT_INIT;
 
-    at_check();
-    // at_echo();
-
     if (at_wifi_info_get(&wifi_info) == AT_STATUS_OK) {
-        printf("Wi-Fi state: %u\r\n", wifi_info.state);
-        printf("SSID: %s\r\n", wifi_info.ssid);
+        LOG_DEBUG("Wi-Fi state: %u\r\n", wifi_info.state);
+        LOG_DEBUG("SSID: %s\r\n", wifi_info.ssid);
 
         if (wifi_info.state == WIFI_NOT_CONNECTED) {
+            /* ESP32-C3 没有进行过任何 Wi-Fi 有关的设置 */
             event = EVENT_WIFI_NOT_CONNECTED;
             // xQueueSend(g_queue_state_handle, (void*)&event, portMAX_DELAY);
+            fsm_event_send(event);
+        } else if (wifi_info.state == WIFI_DISCONNECTED) {
+            /* ESP32-C3 连接不上指定 SSID 的网络，可能存储的 AP 不在当前的网络环境中。
+               这种情况下需要显示提醒更换网络 */
+            event = STATE_WIFI_NOT_CONNECTED;
             fsm_event_send(event);
         }
     }
@@ -149,6 +153,7 @@ void state_sync_time_entry(void)
     sntp_time_t sntp_time = { 0 };
     clk_t clk = { 0 };
     char date[SNTP_DATE_STR_LEN] = { 0 };
+    event_e event = EVENT_INIT;
 
     if (at_sntp_time_get(&sntp_time) == AT_STATUS_OK) {
         clk_get(&clk);
@@ -167,6 +172,9 @@ void state_sync_time_entry(void)
         lcd_show_ascii(16, 80, COLOR_WHITE, date, FONT_ASCII_GENERAL_COL, FONT_ASCII_GENERAL_ROW);
 
         update_start();
+
+        event = EVENT_WEATHER_GET;
+        fsm_event_send(event);
     }
 
     return;
@@ -178,6 +186,23 @@ void state_sync_time_running(void)
 }
 
 void state_sync_time_exti(void)
+{
+    return;
+}
+
+void state_weather_get_entry(void)
+{
+    at_httpclient_get("SrBsRmt7J9BTrxi2R", "wuxi");
+
+    return;
+}
+
+void state_weather_get_running(void)
+{
+    return;
+}
+
+void state_weather_get_exti(void)
 {
     return;
 }
