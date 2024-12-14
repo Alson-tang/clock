@@ -43,6 +43,7 @@ static at_cmd_cfg_t s_arr_cmd_cfg[] = {
     { AT_CMD_CWSTARTSMART,  "AT+CWSTARTSMART=",     "smartconfig connected wifi",       60000,   NULL,    NULL },
     { AT_CMD_CIPSNTPCFG,    "AT+CIPSNTPCFG=1,8",    "OK",                               2000,    NULL,    NULL },
     { AT_CMD_CIPSNTPTIME,   "AT+CIPSNTPTIME?",      "OK",                               20000,   NULL,    __cmd_cipsntptime_cb },
+    { AT_CMD_HTTPCLIENT,    "AT+HTTPCLIENT=",       "OK",                               10000,   NULL,    NULL },
 };
 static at_cmd_cfg_t s_st_cur_at_cmd_cfg = { AT_CMD_AT, NULL, NULL, 0, NULL, NULL };
 
@@ -288,4 +289,33 @@ at_status at_sntp_time_get(sntp_time_t *p_sntp_time)
     snprintf((char*)s_arr_cmd, AT_CMD_BUF_MAX_LEN, "%s\r\n", s_arr_cmd_cfg[cmd].p_request);
 
     return __at_cmd_send(cmd, s_arr_cmd, p_sntp_time);
+}
+
+at_status at_httpclient_get(char *p_key, char *p_location)
+{
+    at_cmd_e cmd = AT_CMD_HTTPCLIENT;
+    uint8_t *p_url = NULL;
+
+    AT_CMD_BUF_INIT;
+
+    p_url = (uint8_t*)malloc(HTTP_WEATHER_SERVER_URL_MAX_LEN);
+    if (p_url == NULL) {
+        return AT_STATUS_ERROR;
+    } else {
+        snprintf((char*)p_url,
+                HTTP_WEATHER_SERVER_URL_MAX_LEN,
+                HTTP_WEATHER_SERVER_URL,
+                p_key,
+                p_location);
+
+        snprintf((char*)s_arr_cmd,
+                AT_CMD_BUF_MAX_LEN,
+                "%s2,0,\"%s\",1\r\n",
+                s_arr_cmd_cfg[cmd].p_request,
+                (char*)p_url);
+
+        free(p_url);
+    }
+
+    return __at_cmd_send(cmd, s_arr_cmd, NULL);
 }

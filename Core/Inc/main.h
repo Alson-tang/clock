@@ -35,6 +35,11 @@ extern "C" {
 #include "event_groups.h"
 #include "semphr.h"
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#include "qrencode.h"
+#endif
+
 #include "system.h"
 #include "uart.h"
 #include "spi_device.h"
@@ -51,6 +56,7 @@ extern "C" {
 #include "at.h"
 #include "esp32.h"
 #include "state.h"
+#include "qrcode.h"
 
 extern QueueHandle_t g_queue_network_handle;
 extern EventGroupHandle_t g_event_group_handle;

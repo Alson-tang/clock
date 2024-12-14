@@ -337,9 +337,9 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls> --no-multibyte-chars</MiscControls>
-              <Define>USE_HAL_DRIVER,STM32F103xE</Define>
+              <Define>USE_HAL_DRIVER,STM32F103xE,HAVE_CONFIG_H</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;../Drivers/STM32F1xx_HAL_Driver/Inc;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM3;../Drivers/CMSIS/Device/ST/STM32F1xx/Include;../Drivers/CMSIS/Include;..\Drivers\Peripherals\Key;..\Drivers\Peripherals\Led;..\Drivers\Peripherals\Uart;..\Drivers\Peripherals\Spi;..\Drivers\Peripherals\Spi\W25q64_hal;..\Drivers\Peripherals\Spi\W25q64;..\Drivers\Peripherals\Spi\St7789_hal;..\Drivers\Peripherals\Spi\St7789;..\App\Inc;..\Drivers\Peripherals\Esp32</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;../Drivers/STM32F1xx_HAL_Driver/Inc;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM3;..\Middlewares\Third_Party\qrencode-4.1.1;../Drivers/CMSIS/Device/ST/STM32F1xx/Include;../Drivers/CMSIS/Include;..\Drivers\Peripherals\Key;..\Drivers\Peripherals\Led;..\Drivers\Peripherals\Uart;..\Drivers\Peripherals\Spi;..\Drivers\Peripherals\Spi\W25q64_hal;..\Drivers\Peripherals\Spi\W25q64;..\Drivers\Peripherals\Spi\St7789_hal;..\Drivers\Peripherals\Spi\St7789;..\App\Inc;..\Drivers\Peripherals\Esp32</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -576,6 +576,61 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>Middlewares/QR</GroupName>
+          <Files>
+            <File>
+              <FileName>bitstream.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Middlewares\Third_Party\qrencode-4.1.1\bitstream.c</FilePath>
+            </File>
+            <File>
+              <FileName>mask.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Middlewares\Third_Party\qrencode-4.1.1\mask.c</FilePath>
+            </File>
+            <File>
+              <FileName>mmask.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Middlewares\Third_Party\qrencode-4.1.1\mmask.c</FilePath>
+            </File>
+            <File>
+              <FileName>mqrspec.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Middlewares\Third_Party\qrencode-4.1.1\mqrspec.c</FilePath>
+            </File>
+            <File>
+              <FileName>qrencode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Middlewares\Third_Party\qrencode-4.1.1\qrencode.c</FilePath>
+            </File>
+            <File>
+              <FileName>qrinput.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Middlewares\Third_Party\qrencode-4.1.1\qrinput.c</FilePath>
+            </File>
+            <File>
+              <FileName>qrspec.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Middlewares\Third_Party\qrencode-4.1.1\qrspec.c</FilePath>
+            </File>
+            <File>
+              <FileName>rsecc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Middlewares\Third_Party\qrencode-4.1.1\rsecc.c</FilePath>
+            </File>
+            <File>
+              <FileName>split.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Middlewares\Third_Party\qrencode-4.1.1\split.c</FilePath>
+            </File>
+            <File>
+              <FileName>config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Middlewares\Third_Party\qrencode-4.1.1\config.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>Drivers/Peripherals</GroupName>
           <Files>
             <File>
@@ -697,6 +752,11 @@
               <FileName>state.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\App\Src\state.c</FilePath>
+            </File>
+            <File>
+              <FileName>qrcode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\Src\qrcode.c</FilePath>
             </File>
           </Files>
         </Group>

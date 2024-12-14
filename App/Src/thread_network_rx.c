@@ -45,6 +45,9 @@ void network_rx_task(void *pvParameters)
                 event = EVENT_SYNC_TIME;
                 // xQueueSend(g_queue_state_handle, (void*)&event, portMAX_DELAY);
                 fsm_event_send(event);
+            } else if (strstr((const char*)p_dst, "ready") != NULL) {
+                event = EVENT_INIT;
+                fsm_event_send(event);
             }
         }
     }

@@ -402,6 +402,62 @@ void lcd_show_clock_num(char *hour, uint16_t hour_color, char *min, uint16_t min
     lcd_show_clock_num_s(second_color, second);
 }
 
+/**
+  *********************************************************************************************************
+  *   函 数 名: lcd_show_qrcode
+  *   功能说明: 在屏幕上显示放大后的二维码
+  *   形    参: width 二维码宽度
+  *   形    参: p_data 二维码点阵
+  *   形    参: expand 扩大倍数
+  *   说    明：当 expand 设置为 2 时，二维码显示的一个像素点将扩展为 4 个像素点显示，即行用 2 个像素点，列用 2 个
+  *            像素点；当 expand 设置为 3 时，二维码显示的一个像素点将扩展为 9 个像素点显示，即行用 3 个像素点，列
+  *            用 3 个像素点；以此类推
+  *   返 回 值: 无
+  *********************************************************************************************************
+  */
+void lcd_show_qrcode(int width, uint8_t *p_data, uint8_t expand)
+{
+    uint16_t pixel_width = 0;
+    uint16_t start_col = 0;
+    uint16_t start_row = 0;
+    uint16_t cur_col = 0;
+    uint16_t cur_row = 0;
+    uint16_t pixel_color = COLOR_BLACK;
+
+    pixel_width = (uint16_t)(width * expand);
+
+    if ((pixel_width > ST7789_COL) || (pixel_width > ST7789_ROW)) {
+        return;
+    } else {
+        start_col = ((ST7789_COL - pixel_width) >> 1);
+        start_row = ((ST7789_ROW - pixel_width) >> 1);
+
+        cur_col = start_col;
+        cur_row = start_row;
+
+        for (uint16_t i = 0; i < width; i++) {
+            for (uint16_t j = 0; j < width; j++) {
+                if (p_data[i * width + j] & 0x01) {
+                    pixel_color = COLOR_BLACK;
+                } else {
+                    pixel_color = COLOR_WHITE;
+                }
+
+                st7789_set_window(cur_col, cur_row, cur_col + expand - 1, cur_row + expand - 1);
+
+                for (uint16_t k = 0; k < (expand * expand); k++) {
+                    st7789_set_color(pixel_color);
+                }
+
+                cur_row += expand;
+            }
+
+            cur_col += expand;
+            cur_row = start_row;
+        }
+    }
+}
+
 uint16_t lcd_get_back_color(void)
 {
     return s_back_color;

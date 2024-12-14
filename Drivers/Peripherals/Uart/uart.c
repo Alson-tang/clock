@@ -8,7 +8,7 @@ UART_HandleTypeDef *p_g_update_font_lib_uart_handle = &s_debug_uart_handle;
 void uart_init(void)
 {
     s_debug_uart_handle.Instance        = DEBUG_UART_NUM;
-    s_debug_uart_handle.Init.BaudRate   = 9600;
+    s_debug_uart_handle.Init.BaudRate   = 115200;
     s_debug_uart_handle.Init.WordLength = UART_WORDLENGTH_8B;
     s_debug_uart_handle.Init.StopBits   = UART_STOPBITS_1;
     s_debug_uart_handle.Init.Parity     = UART_PARITY_NONE;

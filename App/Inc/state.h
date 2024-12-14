@@ -16,6 +16,7 @@ typedef enum event {
     EVENT_WIFI_CONNECTED,
     EVENT_WIFI_DISCONNECTED,
     EVENT_SYNC_TIME,
+    EVENT_WEATHER_GET,
     EVENT_RUNNING,
 } event_e;
 
@@ -27,6 +28,7 @@ typedef enum state {
     STATE_WIFI_CONNECTED,
     STATE_WIFI_DISCONNECTED,
     STATE_SYNC_TIME,
+    STATE_WEATHER_GET,
     STATE_RUNNING,
 } state_e;
 
@@ -77,6 +79,10 @@ void state_wifi_disconnected_exti(void);
 void state_sync_time_entry(void);
 void state_sync_time_running(void);
 void state_sync_time_exti(void);
+
+void state_weather_get_entry(void);
+void state_weather_get_running(void);
+void state_weather_get_exti(void);
 
 /* 队列 */
 extern QueueHandle_t g_queue_state_handle;
