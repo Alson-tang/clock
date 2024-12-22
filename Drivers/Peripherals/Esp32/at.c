@@ -15,6 +15,7 @@
 
 extern at_status __cmd_cwstate_cb(const char *p, uint32_t len, void *p_para);
 extern at_status __cmd_cipsntptime_cb(const char *p, uint32_t len, void *p_para);
+extern at_status __cmd_httpcget_cb(const char *p, uint32_t len, void *p_para);
 
 const static wifi_softap_info_t s_st_wifi_softap_info = {
     .ssid = SOFTAP_SSID_DEF,
@@ -43,7 +44,7 @@ static at_cmd_cfg_t s_arr_cmd_cfg[] = {
     { AT_CMD_CWSTARTSMART,  "AT+CWSTARTSMART=",     "smartconfig connected wifi",       60000,   NULL,    NULL },
     { AT_CMD_CIPSNTPCFG,    "AT+CIPSNTPCFG=1,8",    "OK",                               2000,    NULL,    NULL },
     { AT_CMD_CIPSNTPTIME,   "AT+CIPSNTPTIME?",      "OK",                               20000,   NULL,    __cmd_cipsntptime_cb },
-    { AT_CMD_HTTPCLIENT,    "AT+HTTPCLIENT=",       "OK",                               10000,   NULL,    NULL },
+    { AT_CMD_HTTPCGET,      "AT+HTTPCGET=",         "OK",                               10000,   NULL,    __cmd_httpcget_cb },
 };
 static at_cmd_cfg_t s_st_cur_at_cmd_cfg = { AT_CMD_AT, NULL, NULL, 0, NULL, NULL };
 
@@ -100,6 +101,43 @@ at_status __cmd_cipsntptime_cb(const char *p, uint32_t len, void *p_para)
         memcpy((void*)p_para, (void*)&sntp_time, sizeof(sntp_time_t));
 
         return AT_STATUS_OK;
+    }
+}
+
+/* +HTTPCGET:258,{"results":[{"location":{"id":"WTTE97PU94T9","name":"Wuxi","country":"CN","path":"Wuxi,Wuxi,Jiangsu,China","timezone":"Asia/Shanghai","timezone_offset":"+08:00"},"now":{"text":"Sunny","code":"0","temperature":"9"},"last_update":"2024-12-15T13:44:06+08:00"}]} */
+at_status __cmd_httpcget_cb(const char *p, uint32_t len, void *p_para)
+{
+    cJSON *p_json = NULL;
+    char *p_str = NULL;
+    char *p_json_str = NULL;
+    int str_len = 0;
+    char text[16] = { 0 };
+    char code[16] = { 0 };
+    char temp[16] = { 0 };
+    weather_info_t *p_weather_info = (weather_info_t *)p_para;
+
+    sscanf(p, "+HTTPCGET:%d,", &str_len);
+    if (str_len == 0) {
+        return AT_STATUS_ERROR;
+    } else {
+        p_str = strstr(p, ",");
+        p_json_str = (char*)malloc(str_len + 1);
+        if (p_json_str == NULL) {
+            return AT_STATUS_ERROR;
+        } else {
+            memset((void*)p_json_str, 0, str_len + 1);
+            memcpy((void*)p_json_str, (void*)(p_str + 1), str_len);
+
+            json_item_value_get(p_json_str, "text", text, 16);
+            json_item_value_get(p_json_str, "code", code, 16);
+            json_item_value_get(p_json_str, "temperature", temp, 16);
+
+            memcpy((void*)p_weather_info->text, (void*)text, WEATHER_TEXT);
+            p_weather_info->code = atoi(code);
+            p_weather_info->temp = atoi(temp);
+
+            free(p_json_str);
+        }
     }
 }
 
@@ -291,9 +329,9 @@ at_status at_sntp_time_get(sntp_time_t *p_sntp_time)
     return __at_cmd_send(cmd, s_arr_cmd, p_sntp_time);
 }
 
-at_status at_httpclient_get(char *p_key, char *p_location)
+at_status at_httpclient_get(char *p_key, char *p_location, weather_info_t *p_weather_info)
 {
-    at_cmd_e cmd = AT_CMD_HTTPCLIENT;
+    at_cmd_e cmd = AT_CMD_HTTPCGET;
     uint8_t *p_url = NULL;
 
     AT_CMD_BUF_INIT;
@@ -310,12 +348,12 @@ at_status at_httpclient_get(char *p_key, char *p_location)
 
         snprintf((char*)s_arr_cmd,
                 AT_CMD_BUF_MAX_LEN,
-                "%s2,0,\"%s\",1\r\n",
+                "%s\"%s\"\r\n",
                 s_arr_cmd_cfg[cmd].p_request,
                 (char*)p_url);
 
         free(p_url);
     }
 
-    return __at_cmd_send(cmd, s_arr_cmd, NULL);
+    return __at_cmd_send(cmd, s_arr_cmd, p_weather_info);
 }

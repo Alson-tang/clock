@@ -192,7 +192,12 @@ void state_sync_time_exti(void)
 
 void state_weather_get_entry(void)
 {
-    at_httpclient_get("SrBsRmt7J9BTrxi2R", "wuxi");
+    weather_info_t weather_info = { 0 };
+
+    if (at_httpclient_get("SrBsRmt7J9BTrxi2R", "wuxi", &weather_info) == AT_STATUS_OK) {
+        weather_area_clear();
+        weather_temperature_bar_show(weather_info.temp, COLOR_YELLOW);
+    }
 
     return;
 }
