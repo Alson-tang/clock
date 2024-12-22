@@ -29,9 +29,18 @@ extern "C" {
 #define WEATHER_TEMPERATURE_BAR_IMAGE_SIZE       (WEATHER_TEMPERATURE_BAR_COL * WEATHER_TEMPERATURE_BAR_ROW)
 #define WEATHER_IMAGE_SIZE                       (WEATHER_IMAGE_COL * WEATHER_IMAGE_ROW)
 
+#define WEATHER_TEXT                            (16)
+
+typedef struct weather_info {
+    char text[WEATHER_TEXT];
+    int code;
+    int temp;
+} weather_info_t;
+
 void weather_thermometr_show(void);
 void weather_temperature_bar_show(int8_t temp, uint16_t color);
 void weather_show(void);
+void weather_area_clear(void);
 
 #ifdef __cplusplus
 }

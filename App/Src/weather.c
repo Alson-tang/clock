@@ -775,3 +775,19 @@ void weather_show(void)
 
     lcd_show_bmp((uint8_t *)sun, WEATHER_IMAGE_SIZE);
 }
+
+void weather_area_clear(void)
+{
+    uint16_t back_color = 0;
+
+    back_color = lcd_get_back_color();
+
+    st7789_set_window(WEATHER_THERMOMETR_SHOW_COL + WEATHER_THERMOMETR_COL,
+                        WEATHER_THERMOMETR_SHOW_ROW,
+                        176 - 1,
+                        239);
+
+    for (uint32_t i = 0; i < (120 * 40); i++) {
+        st7789_set_color(back_color);
+    }
+}

@@ -40,6 +40,8 @@ extern "C" {
 #include "qrencode.h"
 #endif
 
+#include "cJSON.h"
+
 #include "system.h"
 #include "uart.h"
 #include "spi_device.h"
@@ -57,6 +59,7 @@ extern "C" {
 #include "esp32.h"
 #include "state.h"
 #include "qrcode.h"
+#include "json.h"
 
 extern QueueHandle_t g_queue_network_handle;
 extern EventGroupHandle_t g_event_group_handle;

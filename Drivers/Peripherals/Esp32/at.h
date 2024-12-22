@@ -37,9 +37,8 @@ extern "C" {
 #define SNTP_DATE_STR_LEN                   (16)
 
 /* 默认 HTTP 服务器设置，使用心知天气，key 要自己申请 */
-// #define HTTP_WEATHER_SERVER_URL             "https://api.seniverse.com/v3/weather/now.json?key=%s&location=%s&language=zh-Hans&unit=c"
+#define HTTP_WEATHER_SERVER_URL             "https://api.seniverse.com/v3/weather/now.json?key=%s&location=%s&language=en&unit=c"
 #define HTTP_WEATHER_SERVER_URL_MAX_LEN     (192)
-#define HTTP_WEATHER_SERVER_URL             "http://httpbin.org/get"
 
 typedef int8_t at_status;
 typedef at_status (*cmd_cb)(const char *p, uint32_t len, void *p_para);
@@ -56,7 +55,7 @@ typedef enum at_cmd {
     AT_CMD_CWSTARTSMART,
     AT_CMD_CIPSNTPCFG,
     AT_CMD_CIPSNTPTIME,
-    AT_CMD_HTTPCLIENT,
+    AT_CMD_HTTPCGET,
     AT_CMD_MAX,
 } at_cmd_e;
 
@@ -139,7 +138,7 @@ at_status at_webserver_set(FunctionalState state, wifi_webserver_info_t *p_st_wi
 at_status at_smartconfig_set(smartconfig_type_t type);
 at_status at_sntp_set(void);
 at_status at_sntp_time_get(sntp_time_t *p_sntp_time);
-at_status at_httpclient_get(char *p_key, char *p_location);
+at_status at_httpclient_get(char *p_key, char *p_location, weather_info_t *p_weather_info);
 
 #ifdef __cplusplus
 }

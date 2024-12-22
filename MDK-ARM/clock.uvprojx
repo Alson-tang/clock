@@ -339,7 +339,7 @@
               <MiscControls> --no-multibyte-chars</MiscControls>
               <Define>USE_HAL_DRIVER,STM32F103xE,HAVE_CONFIG_H</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;../Drivers/STM32F1xx_HAL_Driver/Inc;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM3;..\Middlewares\Third_Party\qrencode-4.1.1;../Drivers/CMSIS/Device/ST/STM32F1xx/Include;../Drivers/CMSIS/Include;..\Drivers\Peripherals\Key;..\Drivers\Peripherals\Led;..\Drivers\Peripherals\Uart;..\Drivers\Peripherals\Spi;..\Drivers\Peripherals\Spi\W25q64_hal;..\Drivers\Peripherals\Spi\W25q64;..\Drivers\Peripherals\Spi\St7789_hal;..\Drivers\Peripherals\Spi\St7789;..\App\Inc;..\Drivers\Peripherals\Esp32</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;../Drivers/STM32F1xx_HAL_Driver/Inc;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM3;..\Middlewares\Third_Party\qrencode-4.1.1;..\Middlewares\Third_Party\cJSON-1.7.18;../Drivers/CMSIS/Device/ST/STM32F1xx/Include;../Drivers/CMSIS/Include;..\Drivers\Peripherals\Key;..\Drivers\Peripherals\Led;..\Drivers\Peripherals\Uart;..\Drivers\Peripherals\Spi;..\Drivers\Peripherals\Spi\W25q64_hal;..\Drivers\Peripherals\Spi\W25q64;..\Drivers\Peripherals\Spi\St7789_hal;..\Drivers\Peripherals\Spi\St7789;..\App\Inc;..\Drivers\Peripherals\Esp32</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -631,6 +631,21 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>Middlewares/cJSON</GroupName>
+          <Files>
+            <File>
+              <FileName>cJSON.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Middlewares\Third_Party\cJSON-1.7.18\cJSON.c</FilePath>
+            </File>
+            <File>
+              <FileName>cJSON_Utils.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Middlewares\Third_Party\cJSON-1.7.18\cJSON_Utils.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>Drivers/Peripherals</GroupName>
           <Files>
             <File>
@@ -757,6 +772,11 @@
               <FileName>qrcode.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\App\Src\qrcode.c</FilePath>
+            </File>
+            <File>
+              <FileName>json.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\Src\json.c</FilePath>
             </File>
           </Files>
         </Group>
