@@ -48,6 +48,7 @@ extern "C" {
 #include "update.h"
 #include "esp32_hardware.h"
 #include "esp32.h"
+#include "esp32_wifi.h"
 
 extern QueueHandle_t g_queue_network_handle;
 extern EventGroupHandle_t g_event_group_handle;

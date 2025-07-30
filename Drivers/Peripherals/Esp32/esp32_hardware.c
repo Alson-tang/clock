@@ -1,4 +1,4 @@
-#include "esp32_hardware.h"
+#include "main.h"
 
 void esp32_hardware_init(void)
 {

@@ -1,19 +1,7 @@
 #include "main.h"
 
-#define ESP32_CMD_BUF_INIT(p, size)             \
-    do {                                        \
-        if (p) {                                \
-            memset((void*)p, 0, size);          \
-        }                                       \
-    } while(0)
-
-static uint8_t s_arr_cmd[ESP32_CMD_BUF_MAX_LEN] = { 0 };
 static uint8_t s_arr_rx_buf1[ESP32_RX_BUF_MAX_LEN] = { 0 };
 static uint8_t s_arr_rx_buf2[ESP32_RX_BUF_MAX_LEN] = { 0 };
-
-static esp32_cmd_cfg_t s_arr_cmd_cfg[] = {
-    { ESP32_CMD_AT, "AT", "OK", 1000, NULL },
-};
 
 static esp32_rx_dma_buf_cfg_t s_st_rx_dma_buf_cfg = {
     ESP32_RX_DMA_BUF_1,
@@ -23,7 +11,6 @@ static esp32_rx_dma_buf_cfg_t s_st_rx_dma_buf_cfg = {
 };
 
 static esp32_info_t s_st_esp32_info = {
-    s_arr_cmd_cfg,
     &s_st_rx_dma_buf_cfg,
 };
 
@@ -98,10 +85,7 @@ void esp32_init(void)
     esp32_dma_init();
 }
 
-void esp32_check(void)
+esp32_status esp32_check(void)
 {
-    ESP32_CMD_BUF_INIT(s_arr_cmd, ESP32_CMD_BUF_MAX_LEN);
-
-    snprintf((char*)s_arr_cmd, ESP32_CMD_BUF_MAX_LEN, "%s\r\n", s_arr_cmd_cfg[ESP32_CMD_AT].p_request);
-    HAL_UART_Transmit(&s_st_esp32_uart_handle, s_arr_cmd, strlen((char*)s_arr_cmd), ESP32_CMD_TX_TIMEOUT);
+    return esp32_wifi_check();
 }

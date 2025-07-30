@@ -9,6 +9,7 @@ extern "C" {
 
 #define ESP32_STATUS_OK                         (0)
 #define ESP32_STATUS_ERROR                      (-1)
+#define ESP32_STATUS_TIMEOUT                    (-2)
 
 #define ESP32_UART                              (USART2)
 #define ESP32_UART_BAUDRATE                     (115200)
@@ -26,25 +27,12 @@ extern "C" {
 #define ESP32_RX_BUF_MAX_LEN                    (1024)
 
 typedef int8_t esp32_status;
-typedef esp32_status (*cmd_cb)(void);
-
-typedef enum esp32_cmd {
-    ESP32_CMD_AT,
-    ESP32_CMD_MAX,
-} esp32_cmd_e;
+typedef esp32_status (*cmd_cb)(const char *p_str, uint32_t len);
 
 typedef enum esp32_rx_dma_buf_index {
     ESP32_RX_DMA_BUF_1,
     ESP32_RX_DMA_BUF_2,
 } esp32_rx_dma_buf_index_e;
-
-typedef struct esp32_cmd_cfg {
-    esp32_cmd_e cmd;
-    char *p_request;
-    char *p_response;
-    uint32_t timeout;
-    cmd_cb cb;
-} esp32_cmd_cfg_t;
 
 typedef struct esp32_rx_dma_buf_cfg {
     esp32_rx_dma_buf_index_e buf_index;
@@ -54,7 +42,6 @@ typedef struct esp32_rx_dma_buf_cfg {
 } esp32_rx_dma_buf_cfg_t;
 
 typedef struct esp32_info {
-    esp32_cmd_cfg_t *p_cmd_cfg;
     esp32_rx_dma_buf_cfg_t *p_rx_dma_buf_cfg;
 } esp32_info_t;
 
@@ -65,7 +52,7 @@ void esp32_rx_dma_buf_switch(void);
 esp32_info_t *esp32_info_get(void);
 
 void esp32_init(void);
-void esp32_check(void);
+esp32_status esp32_check(void);
 
 #ifdef __cplusplus
 }

@@ -76,6 +76,10 @@ static void app_init(void)
 
 void start_init_task(void *pvParameters)
 {
+    esp32_wifi_state_e wifi_state = ESP32_WIFI_STATE_NOT_STARTED_CONN;
+    char ssid[WIFI_SSID_MAX_LEN] = { 0 };
+    esp32_wifi_sntp_time_t sntp = { 0 };
+
     /* 硬件初始化 */
     uart_init();
 
@@ -128,7 +132,47 @@ void start_init_task(void *pvParameters)
 
     vTaskDelay(5000 / portTICK_PERIOD_MS);
 
-    esp32_check();
+    if (esp32_check() == ESP32_STATUS_OK) {
+        printf("ESP32-C3 module online\r\n");
+    } else {
+        printf("ESP32-C3 module offline\r\n");
+    }
+
+    esp32_wifi_mode_e mode = ESP32_WIFI_DISABLE;
+    if (esp32_wifi_mode_get(&mode) == ESP32_STATUS_OK) {
+        printf("ESP32-C3 Wi-Fi mode is %d\r\n", mode);
+    }
+
+    if (esp32_wifi_state_get(&wifi_state, ssid, WIFI_SSID_MAX_LEN) == ESP32_STATUS_OK) {
+        switch (wifi_state) {
+            case ESP32_WIFI_STATE_NOT_STARTED_CONN: {
+                esp32_wifi_mode_set(ESP32_WIFI_STATION);
+                esp32_wifi_smartconfig_start();
+
+                break;
+            }
+
+            case ESP32_WIFI_STATE_CONNECTED_IPV4: {
+                printf("SSID: %s\r\n", ssid);
+                esp32_wifi_sntp_set();
+                vTaskDelay(3000 / portTICK_PERIOD_MS);
+                if (esp32_wifi_sntp_time(&sntp) == ESP32_STATUS_OK) {
+                    printf("SNTP: %u:%u:%u\r\n", sntp.hour, sntp.min, sntp.second);
+
+                    clk.clk_time.clk_hour = sntp.hour;
+                    clk.clk_time.clk_min = sntp.min;
+                    clk.clk_time.clk_second = sntp.second;
+                    clk_set(&clk);
+                    update_start();
+                }
+ 
+                break;
+            }
+
+            default:
+                break;
+        }
+    }
 
     vTaskDelete(NULL);
 }
