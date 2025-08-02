@@ -39,6 +39,7 @@ void st7789_set_window(color_t start_col, uint16_t start_row, uint16_t end_col, 
 void st7789_init(st7789_cfg_t * st7789_cfg);
 void st7789_pixel_draw(color_t col, uint16_t row, uint16_t color);
 void st7789_screen_clear(color_t color);
+void st7789_area_clear(color_t color, uint16_t start_col, uint16_t start_row, uint16_t length, uint16_t width);
 
 #ifdef __cplusplus
 }

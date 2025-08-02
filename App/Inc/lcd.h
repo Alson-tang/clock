@@ -19,8 +19,11 @@ extern "C" {
 #define LCD_SET_DATE_COL_DEF                        (16)
 #define LCD_SET_DATE_ROW_DEF                        (80)
 #define LCD_SET_DATE_STR_DEF                        ("2023.11.29 Wed")
+#define LCD_DATE_LENGTH_DEF                         (208)
+#define LCD_DATE_ROW_DEF                            (24)
 
 void lcd_clear_full_screen(uint16_t color);
+void lcd_clear_date_area(void);
 
 void lcd_show_ascii(uint16_t col,
                     uint16_t row,

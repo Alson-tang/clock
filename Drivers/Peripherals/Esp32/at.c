@@ -71,6 +71,7 @@ at_status __cmd_cwstate_cb(const char *p, uint32_t len, void *p_para)
 }
 
 /* +CIPSNTPTIME:Sun Nov 10 17:36:56 2024 */
+/* +CIPSNTPTIME:Sat Aug  2 15:22:14 2025 */
 at_status __cmd_cipsntptime_cb(const char *p, uint32_t len, void *p_para)
 {
     char *str = NULL;
@@ -81,15 +82,8 @@ at_status __cmd_cipsntptime_cb(const char *p, uint32_t len, void *p_para)
     if (str == NULL) {
         return AT_STATUS_ERROR;
     } else {
-        /* 格式化字符串为 +CIPSNTPTIME:Sun,Nov,10,17:36:56,2024 形式 */
-        index = strstr(str, " ");
-        while (index != NULL) {
-            *index = ',';
-            index = strstr(str, " ");
-        };
-
         sscanf(str,
-            "+CIPSNTPTIME:%3s,%3s,%d,%d:%d:%d,%d\r\n",
+            "+CIPSNTPTIME:%3s %3s %d %d:%d:%d %d\r\n",
             sntp_time.week,
             sntp_time.month,
             &sntp_time.day,
