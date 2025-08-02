@@ -169,7 +169,13 @@ void state_sync_time_entry(void)
                 clk_month_convert(sntp_time.month),
                 sntp_time.day,
                 sntp_time.week);
-        lcd_show_ascii(16, 80, COLOR_WHITE, date, FONT_ASCII_GENERAL_COL, FONT_ASCII_GENERAL_ROW);
+        lcd_clear_date_area();
+        lcd_show_ascii(LCD_SET_DATE_COL_DEF,
+                    LCD_SET_DATE_ROW_DEF,
+                    COLOR_WHITE,
+                    date,
+                    FONT_ASCII_GENERAL_COL,
+                    FONT_ASCII_GENERAL_ROW);
 
         update_start();
 

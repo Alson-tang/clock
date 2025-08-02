@@ -259,3 +259,17 @@ void st7789_screen_clear(color_t color)
         }
     }
 }
+
+void st7789_area_clear(color_t color, uint16_t start_col, uint16_t start_row, uint16_t length, uint16_t width)
+{
+    st7789_set_window(start_col,
+                    start_row,
+                    start_col + length - 1,
+                    start_row + width - 1);
+
+    for(uint16_t col = start_col; col < (start_col + length); col++) {
+        for (uint16_t row = start_row; row < (start_row + width); row++) {
+            st7789_set_color(color);
+        }
+    }
+}

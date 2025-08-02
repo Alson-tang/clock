@@ -131,7 +131,8 @@ static void hardware_init(void)
                   LCD_SET_DATE_ROW_DEF,
                   COLOR_WHITE,
                   LCD_SET_DATE_STR_DEF,
-                  FONT_ASCII_GENERAL_COL, FONT_ASCII_GENERAL_ROW);
+                  FONT_ASCII_GENERAL_COL,
+                  FONT_ASCII_GENERAL_ROW);
 
     /* TFTLCD 太空人显示 */
     astronaut_show();
