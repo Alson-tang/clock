@@ -26,5 +26,15 @@ uint32_t Str2Int(uint8_t *inputstr, uint32_t *intnum);
 void Serial_PutString(uint8_t *p_string);
 HAL_StatusTypeDef Serial_PutByte(uint8_t param);
 
+/*
+  *********************************************************************************************************
+  *                                         宏定义
+  *********************************************************************************************************
+  */
+#define SWAP_16BIT(a, b)                                \
+    (                                                   \
+        ((((uint16_t)(b)) << 16) | (uint16_t)(a))       \
+    )
+
 #endif  /* __COMMON_H */
 
