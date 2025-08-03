@@ -203,6 +203,9 @@ void state_weather_get_entry(void)
     if (at_httpclient_get("SrBsRmt7J9BTrxi2R", "wuxi", &weather_info) == AT_STATUS_OK) {
         weather_area_clear();
         weather_temperature_bar_show(weather_info.temp, COLOR_YELLOW);
+
+        weather_image_area_clear();
+        weather_show((weather_image_e)weather_info.code);
     }
 
     return;

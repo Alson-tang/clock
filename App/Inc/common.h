@@ -33,7 +33,7 @@ HAL_StatusTypeDef Serial_PutByte(uint8_t param);
   */
 #define SWAP_16BIT(a, b)                                \
     (                                                   \
-        ((((uint16_t)(b)) << 16) | (uint16_t)(a))       \
+        ((((uint16_t)(a)) << 8) | (uint16_t)(b))       \
     )
 
 #endif  /* __COMMON_H */
