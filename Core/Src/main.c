@@ -103,6 +103,11 @@ static void hardware_init(void)
        LOG_DEBUG("External FLASH init failed");
     }
 
+    // /* 准备接收上位机发送的 bin 文件 */
+    // if (1) {
+    //   update_font_lib(FONT_LIB_TYPE_GBK);
+    // }
+
     /* TFTLCD 初始化 */
     spi_device_init(SPI_DEVICE_TFTLCD_ST7789);
     lcd_clear_full_screen(COLOR_BLACK);
@@ -138,7 +143,7 @@ static void hardware_init(void)
     astronaut_show();
 
     /* TFTLCD 天气显示 */
-    weather_show();
+    weather_show(WEATHER_IMAGE_0_SUNNY);
 
     /* TFTLCD 温度计和温度显示 */
     weather_thermometr_show();
@@ -188,10 +193,6 @@ int main(void)
     HAL_Init();
 
     SystemClock_Config();
-
-    // /* if (1) {
-    //   update_font_lib(FONT_LIB_TYPE_GBK);
-    // } */
 
     xTaskCreate(start_init_task, "start_init_task", 256, NULL, tskIDLE_PRIORITY, NULL);
 
